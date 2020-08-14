@@ -50,6 +50,7 @@ augroup vimwiki
   endfunction
 
   " sync changes at the start
+  au! ZettelBackLinks
   au! VimEnter * call <sid>pull_changes()
   au! BufRead * call <sid>pull_changes()
   " auto commit changes on each file change
