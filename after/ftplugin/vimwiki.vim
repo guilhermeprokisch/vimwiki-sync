@@ -15,7 +15,7 @@ augroup vimwiki
   " command. the downside is that the command output is not displayed at all.
   " One idea: what about running git asynchronously?
   function! s:git_action(action)
-    exectu ':ZettelBackLinks '
+    execute ':ZettelBackLinks '
     execute ':silent !pushd ' . g:zettel_dir . "; ". a:action . "; popd"
     " prevent screen artifacts
     redraw!
