@@ -15,12 +15,22 @@ augroup vimwiki
   " command. the downside is that the command output is not displayed at all.
   " One idea: what about running git asynchronously?
   function! s:git_action(action)
-    execute ':g/# Backlinks/normal dG '
-    execute ':ZettelBackLinks '
     execute ':silent !pushd ' . g:zettel_dir . "; ". a:action . "; popd"
     " prevent screen artifacts
     redraw!
   endfunction
+
+  function! s:git_action_exit(action)
+      "+execute ':g/# Backlinks/normal dG '
+      "execute ':ZettelBackLinks '
+      execute ':args *.md'
+      execute ':bufdo execute "g/# Backlinks/normal dG" | w '
+      execute ':args *.md'
+      execute ':bufdo execute "ZettelBackLinks" | w'
+      execute ':silent !pushd ' . g:zettel_dir . "; ". a:action . "; popd"
+      " prevent screen artifacts
+      redraw!
+    endfunction
 
   function! My_exit_cb(channel,msg )
     echom "Sync done"
@@ -57,6 +67,6 @@ augroup vimwiki
   " auto commit changes on each file change
   au! BufWritePost * call <sid>git_action("git add .;git commit -m \"Auto commit + push. `date`\"")
   " push changes only on at the end
-  au! VimLeave * call <sid>git_action("git push origin master")
+  au! VimLeave * call <sid>git_action_exit("git push origin master")
   " au! VimLeave * call <sid>push_changes()
 augroup END
